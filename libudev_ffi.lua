@@ -1,7 +1,6 @@
 
 local ffi = require("ffi")
 
---#include <stdarg.h>
 
 -- core types
 ffi.cdef[[
@@ -207,6 +206,37 @@ local Lib_udev = ffi.load("udev")
 
 local exports = {
     Lib_udev = Lib_udev;  
+
+    -- library functions
+    udev_new = Lib_udev.udev_new;
+    udev_queue_new = Lib_udev.udev_queue_new;
+    udev_hwdb_new = Lib_udev.udev_hwdb_new;
+
+    udev_device_new_from_syspath = Lib_udev.udev_device_new_from_syspath;
+    udev_device_get_devtype = Lib_udev.udev_device_get_devtype;
+    udev_device_get_devnode = Lib_udev.udev_device_get_devnode;
+    udev_device_get_parent = Lib_udev.udev_device_get_parent;
+    udev_device_get_parent_with_subsystem_devtype = Lib_udev.udev_device_get_parent_with_subsystem_devtype;
+    udev_device_get_sysattr_value = Lib_udev.udev_device_get_sysattr_value;
+    udev_device_get_sysname = Lib_udev.udev_device_get_sysname;
+    udev_device_unref = Lib_udev.udev_device_unref;
+
+    udev_enumerate_new = Lib_udev.udev_enumerate_new;
+    udev_enumerate_add_match_subsystem = Lib_udev.udev_enumerate_add_match_subsystem;
+    udev_enumerate_get_list_entry = Lib_udev.udev_enumerate_get_list_entry;
+    udev_enumerate_scan_devices = Lib_udev.udev_enumerate_scan_devices;
+    udev_enumerate_unref = Lib_udev.udev_enumerate_unref;
+
+    udev_list_entry_get_name = Lib_udev.udev_list_entry_get_name;
+    udev_list_entry_get_next = Lib_udev.udev_list_entry_get_next;
+    udev_list_entry_get_value = Lib_udev.udev_list_entry_get_value;
 }
+setmetatable(exports, {
+  __call = function(self, ...)
+    for k,v in pairs(self) do
+      _G[k] = v;
+    end
+  end,
+})
 
 return exports
