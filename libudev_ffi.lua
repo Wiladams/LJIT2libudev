@@ -188,19 +188,6 @@ ffi.cdef[[
 int udev_util_encode_string(const char *str, char *str_enc, size_t len);
 ]]
 
---[[
- * udev_list_entry_foreach:
- * @list_entry: entry to store the current position
- * @first_entry: first entry to start with
- *
- * Helper to iterate over all entries of a list.
-
-local function  udev_list_entry_foreach(list_entry, first_entry) 
-        for (list_entry = first_entry; 
-             list_entry != NULL; 
-             list_entry = udev_list_entry_get_next(list_entry))
-end
---]]
 
 local Lib_udev = ffi.load("udev")
 
@@ -209,8 +196,8 @@ local exports = {
 
     -- library functions
     udev_new = Lib_udev.udev_new;
-    udev_queue_new = Lib_udev.udev_queue_new;
-    udev_hwdb_new = Lib_udev.udev_hwdb_new;
+    udev_unref = Lib_udev.udev_unref;
+
 
     udev_device_new_from_syspath = Lib_udev.udev_device_new_from_syspath;
     udev_device_get_devtype = Lib_udev.udev_device_get_devtype;
@@ -227,15 +214,25 @@ local exports = {
     udev_enumerate_scan_devices = Lib_udev.udev_enumerate_scan_devices;
     udev_enumerate_unref = Lib_udev.udev_enumerate_unref;
 
+    udev_hwdb_new = Lib_udev.udev_hwdb_new;
+    udev_hwdb_ref = Lib_udev.udev_hwdb_ref;
+    udev_hwdb_unref = Lib_udev.udev_hwdb_unref;
+    udev_hwdb_get_properties_list_entry = Lib_udev.udev_hwdb_get_properties_list_entry;
+
     udev_list_entry_get_name = Lib_udev.udev_list_entry_get_name;
     udev_list_entry_get_next = Lib_udev.udev_list_entry_get_next;
     udev_list_entry_get_value = Lib_udev.udev_list_entry_get_value;
+
+    udev_queue_new = Lib_udev.udev_queue_new;
+
 }
 setmetatable(exports, {
   __call = function(self, ...)
     for k,v in pairs(self) do
       _G[k] = v;
     end
+
+    return self;
   end,
 })
 

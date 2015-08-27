@@ -32,9 +32,7 @@ local function main ()
     end
     --ffi.gc(udev, udev_unref);
 
-    -- Create a list of the devices in the 'hidraw' subsystem.
-    local enumerate = udev_enumerate_new(udev);
-    --ffi.gc(enumerate, udev_enumerate_unref);
+  --ffi.gc(enumerate, udev_enumerate_unref);
 
     --udev_enumerate_add_match_subsystem(enumerate, "hidraw");
     udev_enumerate_scan_devices(enumerate);
