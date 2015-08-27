@@ -204,6 +204,7 @@ local exports = {
     udev_device_get_devnode = Lib_udev.udev_device_get_devnode;
     udev_device_get_parent = Lib_udev.udev_device_get_parent;
     udev_device_get_parent_with_subsystem_devtype = Lib_udev.udev_device_get_parent_with_subsystem_devtype;
+    udev_device_get_properties_list_entry = Lib_udev.udev_device_get_properties_list_entry;
     udev_device_get_sysattr_value = Lib_udev.udev_device_get_sysattr_value;
     udev_device_get_sysname = Lib_udev.udev_device_get_sysname;
     udev_device_unref = Lib_udev.udev_device_unref;
@@ -212,6 +213,7 @@ local exports = {
     udev_enumerate_add_match_subsystem = Lib_udev.udev_enumerate_add_match_subsystem;
     udev_enumerate_get_list_entry = Lib_udev.udev_enumerate_get_list_entry;
     udev_enumerate_scan_devices = Lib_udev.udev_enumerate_scan_devices;
+    udev_enumerate_scan_subsystems = Lib_udev.udev_enumerate_scan_subsystems;
     udev_enumerate_unref = Lib_udev.udev_enumerate_unref;
 
     udev_hwdb_new = Lib_udev.udev_hwdb_new;

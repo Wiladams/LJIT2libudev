@@ -23,8 +23,10 @@ local UDVListEntry_mt = {
 }
 
 function UDVListEntry.init(self, handle)
+
 	local obj = {
-		Handle = handle;
+		Name = safeffistring(libudev.udev_list_entry_get_name(handle));
+		Value = safeffistring(libudev.udev_list_entry_get_value(handle));
 	}
 	setmetatable(obj, UDVListEntry_mt);
 
@@ -41,11 +43,13 @@ function UDVListEntry.new(self, handle)
 end
 
 function UDVListEntry.name(self)
-	return safeffistring(libudev.udev_list_entry_get_name(self.Handle));
+	return self.Name;
+	--return safeffistring(libudev.udev_list_entry_get_name(self.Handle));
 end
 
 function UDVListEntry.value(self)
-	return safeffistring(libudev.udev_list_entry_get_value(self.Handle));
+	return self.Value;
+	--return safeffistring(libudev.udev_list_entry_get_value(self.Handle));
 end
 
 return UDVListEntry

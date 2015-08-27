@@ -1,7 +1,6 @@
 -- print_hwdb.lua
 package.path = package.path..";../?.lua"
 
-
 local UDVHwdb = require("UDVHwdb")
 local aliases = require("modalias")
 

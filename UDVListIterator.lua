@@ -28,7 +28,7 @@ local function UDVListIterator(handle)
 		end
 
 		local entry = UDVListEntry(currentEntry)
-		if entry:name() == nil then
+		if entry.Name == nil then
 			return nil;
 		end
 
