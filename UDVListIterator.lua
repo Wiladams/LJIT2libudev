@@ -11,6 +11,10 @@ local function UDVListIterator(handle)
 	local function closure()
 		if firsttime then
 			firsttime = not firsttime;
+			if currentEntry == nil then
+				return nil;
+			end
+
 			return currentEntry
 		end
 
@@ -23,7 +27,12 @@ local function UDVListIterator(handle)
 			return nil;
 		end
 
-		return UDVListEntry(currentEntry)
+		local entry = UDVListEntry(currentEntry)
+		if entry:name() == nil then
+			return nil;
+		end
+
+		return entry
 	end
 
 	return closure;

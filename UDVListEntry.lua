@@ -4,7 +4,7 @@ local libudev = require("libudev_ffi")
 local function safeffistring(str)
   --print("safeffistring: ", str)
     if str == nil then
-        str = "BLANK"
+        return nil;
     end
 
     return ffi.string(str);
