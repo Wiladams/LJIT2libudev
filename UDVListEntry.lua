@@ -1,8 +1,18 @@
+--[[
+	For easy composition, UDVListEntry function simply turns a
+	struct udev_list_entry into a table with two named fields.
+	If either of the fields is NULL on the C side, it will not
+	show up within the table.
+
+	safeffistring is used to ensure we don't crash in case a 
+	NULL value is present.  Instead it will simply return 'nil'
+	otherwise, it will use ffi.string to turn the value into 
+	a lua string.
+--]]
 local ffi = require("ffi")
 local libudev = require("libudev_ffi")
 
 local function safeffistring(str)
-  --print("safeffistring: ", str)
     if str == nil then
         return nil;
     end
@@ -10,46 +20,11 @@ local function safeffistring(str)
     return ffi.string(str);
 end
 
-
-local UDVListEntry = {}
-setmetatable(UDVListEntry, {
-	__call = function(self, ...)
-		return self:new(...)
-	end,
-})
-
-local UDVListEntry_mt = {
-	__index = UDVListEntry;
-}
-
-function UDVListEntry.init(self, handle)
-
-	local obj = {
-		Name = safeffistring(libudev.udev_list_entry_get_name(handle));
-		Value = safeffistring(libudev.udev_list_entry_get_value(handle));
+local function UDVListEntry(entry)
+	return {
+		Name = safeffistring(libudev.udev_list_entry_get_name(entry));
+		Value = safeffistring(libudev.udev_list_entry_get_value(entry));
 	}
-	setmetatable(obj, UDVListEntry_mt);
-
-	return obj;
-end
-
-
-function UDVListEntry.new(self, handle)
-	if handle == nil then
-		return nil, "invalid argument"
-	end
-
-	return self:init(handle);
-end
-
-function UDVListEntry.name(self)
-	return self.Name;
-	--return safeffistring(libudev.udev_list_entry_get_name(self.Handle));
-end
-
-function UDVListEntry.value(self)
-	return self.Value;
-	--return safeffistring(libudev.udev_list_entry_get_value(self.Handle));
 end
 
 return UDVListEntry

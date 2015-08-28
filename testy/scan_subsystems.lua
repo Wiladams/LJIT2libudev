@@ -40,6 +40,6 @@ ffi.gc(udev, libudev.udev_unref);
 
 print("{")
 for row in UDVSubsystemQuery(udev) do
-	print(string.format("\t'%s',",row:name()))
+	print(string.format("\t'%s',",row.Name))
 end
 print("}")

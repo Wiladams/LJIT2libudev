@@ -10,7 +10,7 @@ local function print_values(modalias)
 	print(string.format("\t['%s'] = {", modalias));
 
 	for entry in hwdb:entries(modalias) do		
-		print(string.format("\t\t['%s'] = '%s',", entry:name(), entry:value()));
+		print(string.format("\t\t['%s'] = '%s',", entry.Name, entry.Value));
 	end 
 
 	print("\t\t},");

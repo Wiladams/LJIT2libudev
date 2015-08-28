@@ -39,9 +39,11 @@ for row in UDVDeviceQuery(udev) do
 	local listEntry = libudev.udev_device_get_properties_list_entry(dev);
 	local props =  UDVListIterator(listEntry)
 
+	print(string.format("\t\tproperties = {"))
 	for prop in UDVListIterator(listEntry) do
-		print(string.format("\t\t['%s'] = '%s',", prop.Name, prop.Value))
+		print(string.format("\t\t\t['%s'] = '%s',", prop.Name, prop.Value))
 	end
+	print(string.format("\t\t},"))
 	print(string.format("\t},"))
 end
 print("}")
