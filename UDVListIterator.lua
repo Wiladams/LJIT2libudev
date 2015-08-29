@@ -4,38 +4,24 @@ local libudev = require("libudev_ffi")
 local UDVListEntry = require("UDVListEntry")
 
 
-local function UDVListIterator(handle)
-	local firstttime = true;
-	local currentEntry = handle;
-
-	local function closure()
-		if firsttime then
-			firsttime = not firsttime;
-			if currentEntry == nil then
-				return nil;
-			end
-
-			return currentEntry
-		end
-
-		currentEntry = libudev.udev_list_entry_get_next(currentEntry)
-
-		-- you might be tempted to just return currentEntry without
-		-- checking 'nil', but a cdata value that is nil is very different
-		-- from straight up 'nil' as far as terminating an iterator
-		if currentEntry == nil then
-			return nil;
-		end
-
-		local entry = UDVListEntry(currentEntry)
-		if entry.Name == nil then
-			return nil;
-		end
-
-		return entry
+local function UDVListIterator(currentEntry, handle)
+	--print("UDVListIterator: ", currentEntry, handle)
+	if currentEntry == nil then
+		return nil;
 	end
-
-	return closure;
+	
+	local entry = UDVListEntry(currentEntry)
+	-- if we have an entry, but for some reason the name == nil
+	-- then just return nil
+	if entry.Name == nil then
+		return nil;
+	end
+	
+	-- get the next entry before returning
+	local nextEntry = libudev.udev_list_entry_get_next(currentEntry)
+	--print("nextEntry: ", nextEntry)
+	
+	return entry, nextEntry, nextEntry;
 end
 
 return UDVListIterator;
