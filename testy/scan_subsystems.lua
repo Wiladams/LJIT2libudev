@@ -4,10 +4,6 @@
 	This is standalone executable command 
 	Use it like this:
 	$ ./scan_subsystems.lua
-
-	You will see a list of subsystems 
-	If you luajit command is not in /usr/local/bin, change the 
-	first line to reflect where it actually is.
 	
 	If you are chaining commands together, this is a source,
 	not a sink
