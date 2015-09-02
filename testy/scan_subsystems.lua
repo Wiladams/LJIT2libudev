@@ -1,4 +1,4 @@
-#!/usr/local/bin/luajit 
+#!/usr/bin/env luajit 
 
 --[[
 	This is standalone executable command 
@@ -16,30 +16,13 @@
 -- scan_subsystems.lua
 package.path = package.path..";../?.lua"
 
-local ffi = require("ffi")
-local libudev = require("libudev_ffi")
-local UDVListIterator = require("UDVListIterator")
+local UDVContext = require("UDVContext")
 
 
-local function UDVSubsystemQuery(udev)
-	local enumerate = libudev.udev_enumerate_new(udev);
-	ffi.gc(enumerate, libudev.udev_enumerate_unref);
-
-	local res = libudev.udev_enumerate_scan_subsystems(enumerate);
-
-	local listEntry = libudev.udev_enumerate_get_list_entry(enumerate);
-	local results =  UDVListIterator(listEntry)
-
-	return results
-end 
-
-
-
-local udev = libudev.udev_new();
-ffi.gc(udev, libudev.udev_unref);
+local ctxt, err = UDVContext();
 
 print("{")
-for row in UDVSubsystemQuery(udev) do
+for _, row in ctxt:subsystems() do
 	print(string.format("\t'%s',",row.Name))
 end
 print("}")

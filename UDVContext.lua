@@ -48,7 +48,7 @@ end
 function UDVContext.devices(self)
 	-- create the query object
 	local enumerate = libudev.udev_enumerate_new(self.Handle);
-	ffi.gc(enumerate, libudev.udev_enumerate_unref);
+	--ffi.gc(enumerate, libudev.udev_enumerate_unref);
 
 	-- fill it with results
 	local res = libudev.udev_enumerate_scan_devices(enumerate);
@@ -59,5 +59,15 @@ function UDVContext.devices(self)
 	return UDVListIterator, listEntry, listEntry 
 end 
 
+function UDVContext.subsystems(self)
+	local enumerate = libudev.udev_enumerate_new(self.Handle);
+	ffi.gc(enumerate, libudev.udev_enumerate_unref);
+
+	local res = libudev.udev_enumerate_scan_subsystems(enumerate);
+
+	local listEntry = libudev.udev_enumerate_get_list_entry(enumerate);
+	
+	return  UDVListIterator, listEntry, listEntry
+end 
 
 return UDVContext
