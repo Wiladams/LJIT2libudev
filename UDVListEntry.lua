@@ -12,18 +12,12 @@
 local ffi = require("ffi")
 local libudev = require("libudev_ffi")
 
-local function safeffistring(str)
-    if str == nil then
-        return nil;
-    end
 
-    return ffi.string(str);
-end
 
 local function UDVListEntry(entry)
 	return {
-		Name = safeffistring(libudev.udev_list_entry_get_name(entry));
-		Value = safeffistring(libudev.udev_list_entry_get_value(entry));
+		Name = libudev.safeffistring(libudev.udev_list_entry_get_name(entry));
+		Value = libudev.safeffistring(libudev.udev_list_entry_get_value(entry));
 	}
 end
 

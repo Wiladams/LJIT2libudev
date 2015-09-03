@@ -1,3 +1,5 @@
+#!/usr/bin/env luajit
+
 -- print_hwdb.lua
 package.path = package.path..";../?.lua"
 

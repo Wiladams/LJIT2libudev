@@ -189,6 +189,14 @@ int udev_util_encode_string(const char *str, char *str_enc, size_t len);
 ]]
 
 
+local function safeffistring(str)
+    if str == nil then
+        return nil;
+    end
+
+    return ffi.string(str);
+end
+
 local Lib_udev = ffi.load("udev")
 
 local exports = {
@@ -200,13 +208,20 @@ local exports = {
 
 
     udev_device_new_from_syspath = Lib_udev.udev_device_new_from_syspath;
+    udev_device_get_action = Lib_udev.udev_device_get_action;
     udev_device_get_devtype = Lib_udev.udev_device_get_devtype;
     udev_device_get_devnode = Lib_udev.udev_device_get_devnode;
+    udev_device_get_devpath = Lib_udev.udev_device_get_devpath;
+    udev_device_get_driver = Lib_udev.udev_device_get_driver;
+    udev_device_get_is_initialized = Lib_udev.udev_device_get_is_initialized;
     udev_device_get_parent = Lib_udev.udev_device_get_parent;
     udev_device_get_parent_with_subsystem_devtype = Lib_udev.udev_device_get_parent_with_subsystem_devtype;
     udev_device_get_properties_list_entry = Lib_udev.udev_device_get_properties_list_entry;
+    udev_device_get_subsystem = Lib_udev.udev_device_get_subsystem;
     udev_device_get_sysattr_value = Lib_udev.udev_device_get_sysattr_value;
     udev_device_get_sysname = Lib_udev.udev_device_get_sysname;
+    udev_device_get_sysnum = Lib_udev.udev_device_get_sysnum;
+    udev_device_get_syspath = Lib_udev.udev_device_get_syspath;
     udev_device_unref = Lib_udev.udev_device_unref;
 
     udev_enumerate_new = Lib_udev.udev_enumerate_new;
@@ -227,6 +242,8 @@ local exports = {
 
     udev_queue_new = Lib_udev.udev_queue_new;
 
+    -- local functions
+    safeffistring = safeffistring;
 }
 setmetatable(exports, {
   __call = function(self, ...)

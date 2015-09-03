@@ -5,8 +5,8 @@
 	Use it like this:
 	$ ./scan_subsystems.lua
 	
-	If you are chaining commands together, this is a source,
-	not a sink
+	This command will generate a list, single string 
+	per line, of all the subsystems found.
 --]]
 
 -- scan_subsystems.lua
@@ -14,11 +14,8 @@ package.path = package.path..";../?.lua"
 
 local UDVContext = require("UDVContext")
 
-
 local ctxt, err = UDVContext();
 
-print("{")
 for _, row in ctxt:subsystems() do
-	print(string.format("\t'%s',",row.Name))
+	print(row.Name)
 end
-print("}")
