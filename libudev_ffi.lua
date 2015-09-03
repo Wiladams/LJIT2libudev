@@ -222,6 +222,7 @@ local exports = {
     udev_device_get_sysname = Lib_udev.udev_device_get_sysname;
     udev_device_get_sysnum = Lib_udev.udev_device_get_sysnum;
     udev_device_get_syspath = Lib_udev.udev_device_get_syspath;
+    udev_device_get_tags_list_entry = Lib_udev.udev_device_get_tags_list_entry;
     udev_device_unref = Lib_udev.udev_device_unref;
 
     udev_enumerate_new = Lib_udev.udev_enumerate_new;

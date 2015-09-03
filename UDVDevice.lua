@@ -13,9 +13,7 @@ local UDVDevice_mt = {
 }
 
 --[[
-int udev_device_get_is_initialized(struct udev_device *udev_device);
 struct udev_list_entry *udev_device_get_devlinks_list_entry(struct udev_device *udev_device);
-struct udev_list_entry *udev_device_get_properties_list_entry(struct udev_device *udev_device);
 struct udev_list_entry *udev_device_get_tags_list_entry(struct udev_device *udev_device);
 struct udev_list_entry *udev_device_get_sysattr_list_entry(struct udev_device *udev_device);
 const char *udev_device_get_property_value(struct udev_device *udev_device, const char *key);
@@ -60,6 +58,11 @@ end
 
 function UDVDevice.properties(self)
 	local listEntry = libudev.udev_device_get_properties_list_entry(self.Handle);
+
+	return UDVListIterator, listEntry, listEntry;
+end
+function UDVDevice.tags(self)
+	local listEntry = libudev.udev_device_get_tags_list_entry(self.Handle);
 
 	return UDVListIterator, listEntry, listEntry;
 end

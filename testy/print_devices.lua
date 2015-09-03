@@ -17,9 +17,7 @@ end
 
 print("{")
 for _, dev in ctxt:devices() do
-	--for k,v in pairs(dev) do
-	--	print(k,v)
-	--end
+
 
 	print(string.format("\t['%s'] = {",dev.SysName));
 	printField("DevPath", dev.DevPath);
@@ -33,11 +31,32 @@ for _, dev in ctxt:devices() do
 	printField("Action", dev.Action);
 	printField("IsInitialized", dev.IsInitialized);
 
-	print(string.format("\t\tproperties = {"))
+	local firstone = true
 	for _, prop in dev:properties() do
+		if firstone then
+			print(string.format("\t\tproperties = {"))
+			firstone = not firstone;
+		end
+
 		print(string.format("\t\t\t['%s'] = '%s',", prop.Name, prop.Value))
 	end
-	print(string.format("\t\t},"))
+	if not firstone then
+		print(string.format("\t\t},"))
+	end
+
+	firstone = true;
+	for _, tag in dev:tags() do
+		if firstone then
+			print(string.format("\t\ttags = {"))
+			firstone = not firstone
+		end
+
+		print(string.format("\t\t\t'%s',", tag.Name))
+	end
+	if not firstone then
+		print(string.format("\t\t},"))
+	end
+	
 	print(string.format("\t},"))
 end
 print("}")
