@@ -12,17 +12,7 @@ local UDVDevice_mt = {
 	__index = UDVDevice;
 }
 
---[[
-struct udev_list_entry *udev_device_get_devlinks_list_entry(struct udev_device *udev_device);
-struct udev_list_entry *udev_device_get_tags_list_entry(struct udev_device *udev_device);
-struct udev_list_entry *udev_device_get_sysattr_list_entry(struct udev_device *udev_device);
-const char *udev_device_get_property_value(struct udev_device *udev_device, const char *key);
-unsigned long long int udev_device_get_seqnum(struct udev_device *udev_device);
-unsigned long long int udev_device_get_usec_since_initialized(struct udev_device *udev_device);
-const char *udev_device_get_sysattr_value(struct udev_device *udev_device, const char *sysattr);
-int udev_device_set_sysattr_value(struct udev_device *udev_device, const char *sysattr, char *value);
-int udev_device_has_tag(struct udev_device *udev_device, const char *tag);
---]]
+
 
 function UDVDevice.init(self, ctxt, handle, syspath)
 	local obj = {
@@ -56,11 +46,28 @@ function UDVDevice.new(self, ctxt, syspath)
 	return self:init(ctx, handle, syspath)
 end
 
+-- iterate over all the properties of the device
 function UDVDevice.properties(self)
 	local listEntry = libudev.udev_device_get_properties_list_entry(self.Handle);
 
 	return UDVListIterator, listEntry, listEntry;
 end
+
+-- retrieve the value of a single property
+function UDVDevice.getProperty(self, name)
+	name = name:lower()
+	for _, prop in self:properties() do 
+		if name == prop.Name:lower() then
+			return prop.Value;
+		end
+	end
+
+	return nil;
+end
+
+-- iterate over all the tags for the device
+-- tags are nothing more than the 'TAGS' property broken out
+-- into a convenient API
 function UDVDevice.tags(self)
 	local listEntry = libudev.udev_device_get_tags_list_entry(self.Handle);
 

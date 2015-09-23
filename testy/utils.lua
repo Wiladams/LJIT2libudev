@@ -1,11 +1,8 @@
-#!/usr/bin/env luajit
 
--- print_devices.lua
--- print out all the devices in the system
--- can be chained with other commands to provide filters and such
--- generates a string which is a valid lua table
 package.path = package.path..";../?.lua"
 
+
+local fun = require("fun")()
 local ctxt, err = require("UDVContext")()
 assert(ctxt ~= nil, "Error creating context")
 
@@ -15,22 +12,12 @@ local function printField(name, value)
 	end
 end
 
-print("{")
-for _, dev in ctxt:devices() do
+local function printBoolField(name, value)
+	print(string.format("\t\t%s = %s;", name, value));
+end
 
-
-	print(string.format("\t['%s'] = {",dev.SysName));
-	printField("DevPath", dev.DevPath);
-	printField("Subsystem", dev.Subsystem);
-	printField("DevType", dev.DevType);
-	printField("SysPath", dev.SysPath);
-	printField("SysName", dev.SysName);
-	printField("SysNum", dev.SysNum);
-	printField("DevNode", dev.DevNode);
-	printField("Driver", dev.Driver);
-	printField("Action", dev.Action);
-	printField("IsInitialized", dev.IsInitialized);
-
+local function printDeviceProperties(dev)
+	--  print device properties
 	local firstone = true
 	for _, prop in dev:properties() do
 		if firstone then
@@ -43,8 +30,11 @@ for _, dev in ctxt:devices() do
 	if not firstone then
 		print(string.format("\t\t},"))
 	end
+end
 
-	firstone = true;
+local function printDeviceTags(dev)
+	-- print tags if any
+	local firstone = true;
 	for _, tag in dev:tags() do
 		if firstone then
 			print(string.format("\t\ttags = {"))
@@ -56,7 +46,29 @@ for _, dev in ctxt:devices() do
 	if not firstone then
 		print(string.format("\t\t},"))
 	end
-	
+end
+
+
+local function printDevice(dev)
+	print(string.format("\t['%s'] = {",dev.SysName));
+
+	printField("SysPath", dev.SysPath);
+	printField("SysName", dev.SysName);
+	printField("SysNum", dev.SysNum);
+	printField("DevNode", dev.DevNode);
+	printField("Action", dev.Action);
+	printBoolField("IsInitialized", dev.IsInitialized);
+
+	printDeviceProperties(dev);
+	printDeviceTags(dev);
 	print(string.format("\t},"))
 end
-print("}")
+
+
+local exports = {
+	printDevice = printDevice;
+}
+
+return exports
+
+
