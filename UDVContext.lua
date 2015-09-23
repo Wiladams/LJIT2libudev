@@ -1,6 +1,6 @@
 -- UDVContext.lua
 local ffi = require("ffi")
-local libudev = require("libudev_ffi")
+local udev = require("udev_ffi")
 local UDVListIterator = require("UDVListIterator")
 local UDVListEntry = require("UDVListEntry")
 local UDVDevice = require("UDVDevice")
@@ -28,18 +28,19 @@ function UDVContext.init(self, handle)
 end
 
 function UDVContext.new(self)
-	local udev = libudev.udev_new();
-	if udev == nil then
+	local ctxt = udev.udev_new();
+	if ctxt == nil then
 		return nil, "error with udev_new()"
 	end
 
-	ffi.gc(udev, libudev.udev_unref);
+	ffi.gc(ctxt, udev.udev_unref);
 	
-	return self:init(udev)
+	return self:init(ctxt)
 end
 
+-- Get a specific device from a syspath
 function UDVContext.deviceFromSysPath(self, syspath)
-	local dev = libudev.udev_device_new_from_syspath(self.Handle, syspath)
+	local dev = udev.udev_device_new_from_syspath(self.Handle, syspath)
 	if dev == nil then
 		return nil;
 	end
@@ -56,7 +57,6 @@ end
 		udev_device_new_from_syspath(udev, syspath)
 
 --]]
--- gen, param, state
 local function UDVDeviceIterator(ctxt, currentEntry)
 	--print("UDVListIterator: ", currentEntry, handle)
 	if currentEntry == nil then
@@ -71,7 +71,7 @@ local function UDVDeviceIterator(ctxt, currentEntry)
 	end
 	
 	-- get the next entry before returning
-	local nextEntry = libudev.udev_list_entry_get_next(currentEntry)
+	local nextEntry = udev.udev_list_entry_get_next(currentEntry)
 	--print("nextEntry: ", nextEntry)
 	
 	-- return nextState, currentState
@@ -80,25 +80,24 @@ end
 
 function UDVContext.devices(self)
 	-- create the query object
-	local enumerate = libudev.udev_enumerate_new(self.Handle);
-	--ffi.gc(enumerate, libudev.udev_enumerate_unref);
+	local enumerate = udev.udev_enumerate_new(self.Handle);
+	--ffi.gc(enumerate, udev.udev_enumerate_unref);
 
 	-- fill it with results
-	local res = libudev.udev_enumerate_scan_devices(enumerate);
+	local res = udev.udev_enumerate_scan_devices(enumerate);
 
-	-- get the results
-	local listEntry = libudev.udev_enumerate_get_list_entry(enumerate);
-	--local results =  UDVListIterator(listEntry)
+	local listEntry = udev.udev_enumerate_get_list_entry(enumerate);
+
 	return UDVDeviceIterator, self, listEntry 
 end 
 
 function UDVContext.subsystems(self)
-	local enumerate = libudev.udev_enumerate_new(self.Handle);
-	ffi.gc(enumerate, libudev.udev_enumerate_unref);
+	local enumerate = udev.udev_enumerate_new(self.Handle);
+	ffi.gc(enumerate, udev.udev_enumerate_unref);
 
-	local res = libudev.udev_enumerate_scan_subsystems(enumerate);
+	local res = udev.udev_enumerate_scan_subsystems(enumerate);
 
-	local listEntry = libudev.udev_enumerate_get_list_entry(enumerate);
+	local listEntry = udev.udev_enumerate_get_list_entry(enumerate);
 	
 	return  UDVListIterator, listEntry, listEntry
 end 

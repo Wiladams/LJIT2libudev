@@ -9,16 +9,15 @@
 	otherwise, it will use ffi.string to turn the value into 
 	a lua string.
 --]]
-local ffi = require("ffi")
-local libudev = require("libudev_ffi")
+local udev = require("udev")
 
 
 
-local function UDVListEntry(entry)
+local function toUDVListEntry(entry)
 	return {
-		Name = libudev.safeffistring(libudev.udev_list_entry_get_name(entry));
-		Value = libudev.safeffistring(libudev.udev_list_entry_get_value(entry));
+		Name = udev.safeffistring(udev.udev_list_entry_get_name(entry));
+		Value = udev.safeffistring(udev.udev_list_entry_get_value(entry));
 	}
 end
 
-return UDVListEntry
+return toUDVListEntry

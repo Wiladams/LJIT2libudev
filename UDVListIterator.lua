@@ -1,11 +1,11 @@
 -- UDVListIterator.lua
-local ffi = require("ffi")
-local libudev = require("libudev_ffi")
+-- this is a generator, which contains an implicit
+-- map to go from the C struct to the Lua table
+
+local udev = require("udev")
 local UDVListEntry = require("UDVListEntry")
 
--- gen, param, state
 local function UDVListIterator(listHead, currentEntry)
-	--print("UDVListIterator: ", currentEntry, handle)
 	if currentEntry == nil then
 		return nil;
 	end
@@ -18,10 +18,8 @@ local function UDVListIterator(listHead, currentEntry)
 	end
 	
 	-- get the next entry before returning
-	local nextEntry = libudev.udev_list_entry_get_next(currentEntry)
-	--print("nextEntry: ", nextEntry)
-	
-	-- return nextState, currentState
+	local nextEntry = udev.udev_list_entry_get_next(currentEntry)
+
 	return nextEntry, entry;
 end
 

@@ -1,6 +1,6 @@
 
 local ffi = require("ffi")
-local libudev = require("libudev_ffi")
+local udev = require("udev")
 
 local UDVListIterator = require("UDVListIterator")
 
@@ -28,15 +28,15 @@ end
 
 function UDVHwdb.new(self, ctxt)
 	if not ctxt then
-		ctxt = libudev.udev_new()
-		ffi.gc(ctxt, libudev.udev_unref)
+		ctxt = udev.udev_new()
+		ffi.gc(ctxt, udev.udev_unref)
 	end
 
-	local handle = libudev.udev_hwdb_new(ctxt);
+	local handle = udev.udev_hwdb_new(ctxt);
 	if handle == nil then
 		return false, "hwdb_new failed"
 	end
-	ffi.gc(handle, libudev.udev_hwdb_unref);
+	ffi.gc(handle, udev.udev_hwdb_unref);
 
 	return self:init(handle);
 end
@@ -46,7 +46,7 @@ end
 function UDVHwdb.entries(self, modalias, flags)
 	flags = flags or 0;
 
-	local listEntry = libudev.udev_hwdb_get_properties_list_entry(self.Handle, modalias, flags);
+	local listEntry = udev.udev_hwdb_get_properties_list_entry(self.Handle, modalias, flags);
 
 	return UDVListIterator(listEntry);
 end
