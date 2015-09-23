@@ -1,6 +1,6 @@
 --[[
 	For easy composition, UDVListEntry function simply turns a
-	struct udev_list_entry into a table with two named fields.
+	'struct udev_list_entry' into a table with two named fields.
 	If either of the fields is NULL on the C side, it will not
 	show up within the table.
 

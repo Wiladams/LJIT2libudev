@@ -48,7 +48,7 @@ function UDVHwdb.entries(self, modalias, flags)
 
 	local listEntry = udev.udev_hwdb_get_properties_list_entry(self.Handle, modalias, flags);
 
-	return UDVListIterator(listEntry);
+	return UDVListIterator, listEntry, listEntry;
 end
 
 return UDVHwdb
